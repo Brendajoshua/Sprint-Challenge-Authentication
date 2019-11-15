@@ -1,26 +1,25 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import {Link} from 'react-router-dom';
+import './Navbar.scss';
 
-const NavBar = () => {
+const Navbar = (props) => {
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        props.history.push('/')
+    }
+
   return (
-    <div>
-      <NavLink to="/login">
-        <button>Login</button>
-      </NavLink>
-      <NavLink to="/register">
-        <button>Register</button>
-      </NavLink>
-      <NavLink to="/login">
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-          }}
-        >
-          Logout
-        </button>
-      </NavLink>
-    </div>
+    <nav className="navbar">
+      <Link to='/'><h1>Jokes APP</h1></Link>
+      <div className="right-nav">
+      <Link to='/'><h1>login</h1></Link>
+      <Link to='/register'><h1>register</h1></Link>
+      <Link to='/jokes'><h1>Jokes</h1></Link>
+      <Link onClick={logout}><h1>logout</h1></Link>
+      </div>
+    </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;

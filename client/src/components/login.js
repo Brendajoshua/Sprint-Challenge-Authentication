@@ -1,48 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {Formik, Form, Field} from 'formik';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import './Login.scss';
 
-const Login = props => {
-    const [user, setUser ] = useState({ username: '', password: '' });
+function LoginForm(props){
+    const login = (formValue, actions) => {
+        const newUser = {
+          username: formValue.username,
+          password: formValue.password,
+        }
 
-    const handleChange = event => {
-        setUser({ ...user, [event.target.name]: event.target.value });
-    };
-
-    const handleSubmit = event => {
-        event.preventDefault();
-        axios
-        .post('http://localhost:3300/api/auth/register', user)
+        axios.post('http://localhost:3300/api/auth/login', newUser)
         .then(res => {
-            localStorage.setItem('token', res.data.token);
-            props.histroy.push('/jokes');
+          localStorage.setItem('token', res.data.token)
+          actions.resetForm();
+          props.history.replace('/jokes')
         })
-        .catch(err => console.log(err));
-    };
+        .catch(err => {
+          alert(err.message)
+        })
+      }
 
-    return (
-        <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
-      <input
-        name="username"
-        type="text"
-        placeholder="username"
-        value={user.username}
-        onChange={handleChange}
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="password"
-        value={user.password}
-        onChange={handleChange}
-      />
-      <button>Submit</button>
-      <p>
-        Don't have an account? <Link to="/register">Register here!</Link>
-      </p>
-    </form>
-    );
-};
+    const initialUser = {username: '', password: ''}
+    return(
+        <Formik 
+        initialValues = {initialUser}
+        onSubmit={login}
+        render={props => {
+            return(
+                <Form className='form'>
+                    <label htmlFor='username'>username</label>
+                    <Field name='username' type='text' placeholder='username'/>
+                    <label htmlFor='password'>password</label>
+                    <Field name='password' type='password' placeholder='password'/>
+                    <button type='submit'>Log In</button>
+                </Form>
+            )
+        }}/>
+    )
 
-export default Login;
+}
+
+export default LoginForm; 

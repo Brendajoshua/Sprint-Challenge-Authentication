@@ -1,19 +1,13 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import axios from 'axios';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        localStorage.getItem("token") ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/login" />
-        )
-      }
-    />
-  );
-};
+const withAuth = () => {
+    const token = localStorage.getItem('token');
+    return axios.create({
+        headers: {
+            'Content-Type': 'application/json',
+             Authorization: token,
+        }
+    })
+}
 
-export default PrivateRoute;
+export default withAuth;

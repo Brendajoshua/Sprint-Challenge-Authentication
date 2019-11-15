@@ -1,47 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {Formik, Form, Field} from 'formik';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import './Register.scss'
 
-const Register = props => {
-    const [user, setUser] = useState({ username: "", password: "" });
-  
-    const handleChange = event => {
-      setUser({ ...user, [event.target.name]: event.target.value });
-    };
-  
-    const handleSubmit = event => {
-      event.preventDefault();
-      axios
-        .post("http//localhost:3300/api/auth/register", user)
+function RegisterForm(props){
+    const register = (formValue, actions) => {
+        const newUser = {
+          username: formValue.username,
+          password: formValue.password
+        }
+
+        axios.post('http://localhost:3300/api/auth/register', newUser)
         .then(res => {
-          props.history.push("/login");
+          localStorage.setItem('token', res.data.token)
+          actions.resetForm();
+          props.history.replace('/jokes')
         })
-        .catch(err => console.log(err));
-    };
-  
-    return (
-      <form onSubmit={handleSubmit}>
-        <h1>Register</h1>
-        <input
-          name="username"
-          type="text"
-          placeholder="username"
-          value={user.username}
-          onChange={handleChange}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="password"
-          value={user.password}
-          onChange={handleChange}
-        />
-        <button>Submit</button>
-        <p>
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
-      </form>
-    );
-  };
-  
-  export default Register;
+        .catch(err => {
+          alert(err.message)
+        })
+      }
+
+    const initialUser = {username: '', password: ''}
+    return(
+        <Formik 
+        initialValues = {initialUser}
+        onSubmit={register}
+        render={props => {
+            return(
+                <Form className='form'>
+                    <label htmlFor='username'>username</label>
+                    <Field name='username' type='text' placeholder='username'/>
+                    <label htmlFor='password'>password</label>
+                    <Field name='password' type='password' placeholder='password'/>
+                    <button type='submit'>Register</button>
+                </Form>
+            )
+        }}/>
+    )
+
+}
+
+export default RegisterForm; 

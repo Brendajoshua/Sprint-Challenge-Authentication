@@ -1,0 +1,15 @@
+.jokes {
+    display:flex;
+    flex-direction: column;
+
+    .joke {
+        border: 1px solid black;
+        margin: 20px;
+        padding: 20px;
+        width: 60vw;
+
+        h2 {
+            text-align: left;
+        }
+    }
+} 

@@ -1,25 +1,39 @@
 import React from 'react';
-import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
-
-import PrivateRoute from "./utils/PrivateRoute.js";
-
-import NavBar from "./components/NavBar.js";
-import Login from "./components/login.js";
-import Register from "./components/Register.js";
-import Jokes from "./components/Jokes.js";
-
+import {Route} from 'react-router-dom';
+import LoginForm from './components/login';
+import RegisterForm from './components/Register';
+import Navbar from './components/NavBar';
+import Jokes from './components/Jokes';
+import './App.scss';
 
 function App() {
+
   return (
-    <BrowserRouter>
-    <NavBar />
-      <Switch>
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
-        <PrivateRoute path="/jokes" component={Jokes} />
-        <Redirect from="/" to="/jokes" />
-      </Switch>
-    </BrowserRouter>
+    <div className="App">
+      <Route
+        path='/'
+        render={props => {
+          return <Navbar {...props}/>;
+        }}
+      />
+      <Route
+        exact path='/'
+        render={props => {
+          return <LoginForm {...props}/>;
+        }}
+      />
+      <Route
+        exact path='/register'
+        render={props => {
+          return <RegisterForm {...props}/>;
+        }}
+      />
+      <Route 
+      path='/jokes'
+      render={props => {
+        return <Jokes {...props}/>
+      }}/>
+    </div>
   );
 }
 
