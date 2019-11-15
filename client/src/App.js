@@ -1,11 +1,25 @@
 import React from 'react';
+import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
+
+import PrivateRoute from "./utils/PrivateRoute.js";
+
+import NavBar from "./components/NavBar.js";
+import Login from "./components/login.js";
+import Register from "./components/Register.js";
+import Jokes from "./components/Jokes.js";
 
 
 function App() {
   return (
-    <div className="App">
-     <h1> Client App </h1>
-    </div>
+    <BrowserRouter>
+    <NavBar />
+      <Switch>
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <PrivateRoute path="/jokes" component={Jokes} />
+        <Redirect from="/" to="/jokes" />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
